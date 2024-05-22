@@ -4,7 +4,7 @@ using PackageAnalyzer
 using Pkg
 using ProgressMeter
 
-all_packages = find_packages()[4:end];
+all_packages = find_packages();
 all_packages = Any[i for i in all_packages if i.name ∉ ["SeisProcessing", "vOptGeneric", "ExactDiagonalization", "CachedFunctions", "Mads", "FractionalDelayFilter"]]
 push!(all_packages, "https://github.com/JuliaLang/julia")
 push!(all_packages, "https://github.com/JuliaLang/Distributed.jl")
@@ -12,7 +12,7 @@ directory_path = "./tmp_code"
 
 all_results = PackageV1[]
 @showprogress for package in all_packages
-    res = analyze(package, root="./tmp_code")
+    res = analyze(package, root=directory_path)
     push!(all_results, res)
 end
 
@@ -23,7 +23,7 @@ current_packages = [i.name for i in all_results]
     if package.name in current_packages
         continue
     end
-    res = analyze(package, root="./tmp_code")
+    res = analyze(package, root=directory_path)
     display(res)
     push!(all_results, res)
 end
